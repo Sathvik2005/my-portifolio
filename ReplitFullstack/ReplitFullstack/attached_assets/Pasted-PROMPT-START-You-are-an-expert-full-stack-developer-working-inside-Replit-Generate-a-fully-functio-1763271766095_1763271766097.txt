@@ -1,0 +1,172 @@
+PROMPT START
+
+You are an expert full-stack developer working inside Replit.
+Generate a fully functional Portfolio Website for the following person using:
+
+Frontend: HTML + CSS + JavaScript
+
+Backend: Python Flask
+
+Database: SQLite
+
+Folder Structure: Replit compatible
+
+Deployment: Should run directly with “Run” button
+
+Integrations: Contact form → Flask backend → Store messages in SQLite
+
+🧑‍💼 PERSON DETAILS (use everywhere in website)
+
+Name: Kanithi Satya Sathvik
+Title: Machine Learning Engineer | NLP | AI | Data Science
+Email: kanithisathvik@gmail.com
+
+Phone: 9515136729
+Location: Anakapalle, Andhra Pradesh
+GitHub: https://github.com/Sathvik2005
+
+Projects:
+
+AI Resume Screening System (NLP + Streamlit)
+Repo: https://github.com/Sathvik2005/Ai-resume-screening-system-using-python-and-streamlit-aicte-
+
+Heart Disease Prediction (ML)
+Repo: https://github.com/Sathvik2005/Heart_disease_classification
+
+AQI Forecasting (Time-Series ML)
+Repo: https://github.com/Sathvik2005/Air-Quality-Index-Prediction-aicte-
+
+🔥 WHAT YOU MUST GENERATE (VERY IMPORTANT)
+1️⃣ Replit Project Folder Structure
+
+Create this EXACT structure:
+
+/templates
+   └── index.html
+
+/static
+   /css/style.css
+   /js/script.js
+
+app.py
+database.py
+requirements.txt
+README.md
+
+2️⃣ Complete Frontend Code (Generate All Files)
+
+index.html must include:
+
+Hero section
+
+About me
+
+Skills section
+
+Projects (with GitHub links)
+
+Contact form (POST → /contact)
+
+Mobile-responsive
+
+Modern dark UI design
+
+Smooth scroll + animations
+
+style.css must include:
+
+Dark modern gradient theme
+
+Professional layout
+
+Cards for projects
+
+Hover animations
+
+script.js must include:
+
+Smooth scrolling
+
+Form submission function tied to Flask backend
+
+3️⃣ Complete Backend Code (Flask)
+
+app.py must include:
+
+from flask import Flask, render_template, request, jsonify
+
+Route / → serve index.html
+
+Route /contact (POST) → store message
+
+Use SQLite via database.py
+
+Enable CORS
+
+Run on default Replit port
+
+database.py must include:
+
+Create SQLite DB
+
+Create table messages(name, email, message, timestamp)
+
+Function save_message()
+
+4️⃣ requirements.txt
+
+Include:
+
+flask
+flask-cors
+
+
+(No unnecessary packages.)
+
+5️⃣ README.md
+
+Explain:
+
+How to run inside Replit
+
+How to test the contact form
+
+How database works
+
+How to deploy Replit site
+
+🔧 Additional Instructions
+
+All code must be ready-to-run in Replit with one click.
+
+Use my real profile details everywhere.
+
+No placeholders.
+
+Make the UI look professional and portfolio-grade.
+
+Do NOT create dummy pages—everything in a single-page template.
+
+Contact form must show “Message sent successfully!” on success.
+
+Output everything in clean code blocks, each file separately.
+
+PROMPT END
+
+✅ Ready to Use
+
+When you paste this into Replit AI, it will generate:
+✔ Full frontend
+✔ Full backend
+✔ Working contact form
+✔ SQLite database
+✔ Deployment-ready project
+✔ All files auto-created in the Replit workspace
+
+If you want, I can also:
+🔥 generate the complete project myself
+🔥 add admin dashboard
+🔥 add AI chatbot widget
+🔥 convert into FastAPI instead of Flask
+
+Just say: “Generate the full Replit project now.”
