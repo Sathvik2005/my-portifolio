@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,10 @@ import { insertContactMessageSchema, type InsertContactMessage } from "@shared/s
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const contactInfo = [
   {
@@ -24,14 +28,14 @@ const contactInfo = [
   {
     icon: Phone,
     label: "Phone",
-    value: "9515136729",
-    href: "tel:9515136729",
+    value: "+91 9515136729",
+    href: "tel:+919515136729",
     color: "from-accent to-secondary",
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "Anakapalle, Andhra Pradesh",
+    value: "Anakapalle, AP",
     href: null,
     color: "from-secondary to-muted",
   },
@@ -42,11 +46,19 @@ const contactInfo = [
     href: "https://github.com/Sathvik2005",
     color: "from-muted to-primary",
   },
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    value: "linkedin.com/in/sathvik",
+    href: "https://linkedin.com/in/sathvik",
+    color: "from-primary to-accent",
+  },
 ];
 
 export default function Contact() {
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<InsertContactMessage>({
     resolver: zodResolver(insertContactMessageSchema),
@@ -56,6 +68,71 @@ export default function Contact() {
       message: "",
     },
   });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Final scene - closing credits animation
+    gsap.from(".contact-header", {
+      opacity: 0,
+      y: -100,
+      duration: 1.5,
+      ease: "power3.out",
+    });
+
+    // Contact cards reveal like curtain opening
+    gsap.from(".contact-card", {
+      scaleY: 0,
+      transformOrigin: "top",
+      opacity: 0,
+      duration: 1,
+      ease: "power4.out",
+      stagger: 0.2,
+      scrollTrigger: {
+        trigger: ".contact-info-section",
+        start: "top 70%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Form fields spotlight entrance
+    gsap.from(".form-field", {
+      opacity: 0,
+      x: -50,
+      rotateY: -20,
+      duration: 0.8,
+      ease: "back.out(1.5)",
+      stagger: 0.15,
+      scrollTrigger: {
+        trigger: ".contact-form",
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Submit button glow effect
+    gsap.to(".submit-button", {
+      boxShadow: "0 0 20px rgba(var(--primary), 0.5)",
+      duration: 1.5,
+      repeat: -1,
+      yoyo: true,
+      ease: "power1.inOut",
+    });
+
+    // Floating contact info
+    gsap.to(".contact-card", {
+      y: "random(-10, 10)",
+      duration: "random(3, 5)",
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      stagger: 0.2,
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   const contactMutation = useMutation({
     mutationFn: async (data: InsertContactMessage) => {
@@ -80,22 +157,17 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-20 px-4">
+    <div ref={containerRef} className="min-h-screen bg-background py-20 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
+        <div className="contact-header text-center mb-20">
           <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 text-gradient" data-testid="text-contact-heading">
             Get In Touch
           </h1>
           <p className="text-xl text-muted-foreground font-body max-w-2xl mx-auto">
             Have a project in mind or want to collaborate? I'd love to hear from you!
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-5 gap-8">
           {/* Contact Info Cards */}

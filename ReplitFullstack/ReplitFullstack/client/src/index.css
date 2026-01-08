@@ -124,6 +124,7 @@
       hsl(15 90% 55%),
       hsl(45 90% 60%)
     );
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

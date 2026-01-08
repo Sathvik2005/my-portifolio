@@ -1,59 +1,145 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const skillCategories = [
   {
-    title: "AI & Machine Learning",
+    title: "Programming Languages",
     color: "from-primary to-accent",
     skills: [
-      "Machine Learning",
-      "Natural Language Processing",
-      "Deep Learning",
-      "Time Series Analysis",
-      "Computer Vision",
+      "Python",
+      "Java",
+      "SQL",
+      "HTML/CSS",
     ],
   },
   {
-    title: "Programming Languages",
+    title: "ML & Data Science",
     color: "from-accent to-secondary",
     skills: [
-      "Python",
-      "SQL",
+      "Pandas",
+      "NumPy",
+      "scikit-learn",
+      "TensorFlow",
+      "XGBoost",
+      "SVM",
+      "EDA",
+      "Time-Series Analysis",
     ],
   },
   {
-    title: "Frameworks & Libraries",
+    title: "Visualization & Deployment",
     color: "from-secondary to-muted",
     skills: [
-      "TensorFlow",
-      "PyTorch",
-      "Scikit-learn",
+      "Matplotlib",
+      "Seaborn",
       "Streamlit",
     ],
   },
   {
-    title: "Data Science",
+    title: "Tools & Platforms",
     color: "from-muted to-primary",
     skills: [
-      "Data Science",
-      "Pandas",
-      "NumPy",
+      "MySQL",
+      "Git",
+      "GitHub",
+      "VS Code",
+      "Jupyter",
     ],
   },
   {
-    title: "Tools & Technologies",
+    title: "Core Strengths",
     color: "from-primary to-accent",
     skills: [
-      "Git",
-      "Jupyter",
+      "Model Deployment",
+      "Data Cleaning",
+      "Hyperparameter Tuning",
+      "Problem-Solving",
+      "Leadership",
     ],
   },
 ];
 
 export default function Skills() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Floating animation for skill cards
+    cardsRef.current.forEach((card, index) => {
+      if (!card) return;
+      
+      gsap.to(card, {
+        y: "random(-20, 20)",
+        x: "random(-10, 10)",
+        rotation: "random(-2, 2)",
+        duration: "random(3, 5)",
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: index * 0.1,
+      });
+    });
+
+    // Scroll-triggered animations
+    const cards = containerRef.current.querySelectorAll(".skill-card");
+    cards.forEach((card, index) => {
+      gsap.fromTo(
+        card,
+        {
+          opacity: 0,
+          scale: 0.8,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+          delay: (index % 5) * 0.1,
+        }
+      );
+    });
+
+    // Flowing line animation
+    const lines = containerRef.current.querySelectorAll(".category-line");
+    lines.forEach((line) => {
+      gsap.fromTo(
+        line,
+        { scaleX: 0, transformOrigin: "left" },
+        {
+          scaleX: 1,
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: line,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background py-20 px-4">
+    <div ref={containerRef} className="min-h-screen bg-background py-20 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -83,19 +169,20 @@ export default function Skills() {
                 <h2 className={`text-3xl font-display font-semibold mb-2 bg-gradient-to-r ${category.color} bg-clip-text text-transparent inline-block`}>
                   {category.title}
                 </h2>
-                <div className={`h-1 w-20 bg-gradient-to-r ${category.color} rounded-full`}></div>
+                <div className={`category-line h-1 w-20 bg-gradient-to-r ${category.color} rounded-full`}></div>
               </div>
               
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {category.skills.map((skill, skillIndex) => (
-                  <motion.div
+                  <div
                     key={skill}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: categoryIndex * 0.1 + skillIndex * 0.05 }}
+                    ref={(el) => {
+                      const index = categoryIndex * 10 + skillIndex;
+                      cardsRef.current[index] = el;
+                    }}
                   >
                     <Card 
-                      className="glass-panel hover-elevate active-elevate-2 transition-all group cursor-pointer h-full"
+                      className="skill-card glass-panel hover-elevate active-elevate-2 transition-all group cursor-pointer h-full"
                       data-testid={`card-skill-${categoryIndex}-${skillIndex}`}
                     >
                       <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
@@ -116,7 +203,7 @@ export default function Skills() {
                         </Badge>
                       </CardContent>
                     </Card>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </motion.div>

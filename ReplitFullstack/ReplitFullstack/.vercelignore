@@ -1,0 +1,12 @@
+node_modules
+.env
+.git
+*.log
+client/src
+server
+*.md
+tsconfig.json
+vite.config.ts
+tailwind.config.ts
+postcss.config.js
+drizzle.config.ts
